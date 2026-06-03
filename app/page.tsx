@@ -1,7 +1,7 @@
 import Image from "next/image";
-import Background from "./components/Helpers/Background/page";
-import Sidebar from "./components/Helpers/Sidebar/page";
-import Pomodoro from "./components/Helpers/Pomodoro/page";
+import Background from "./components/HomeHelpers/Background/page";
+import Sidebar from "./components/HomeHelpers/Sidebar/page";
+import Pomodoro from "./components/HomeHelpers/Pomodoro/page";
 
 export default function Home() {
   return (
