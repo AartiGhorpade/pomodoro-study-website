@@ -3,16 +3,25 @@ import React, { useEffect, useRef } from "react";
 import { DndContext } from "@dnd-kit/core";
 import Draggable from "./Draggable/page";
 import { successToast, errorToast } from "@/app/Helpers/Toasts";
+import { usePomodoroTimer, useTimerBox } from "@/app/store/useAppStore";
 
 const page = () => {
+  const isTimerBoxOpen = useTimerBox((state) => state.isTimerBoxOpen);
+  const toggleTimerBox = useTimerBox((state) => state.toggleTimerBox);
+  const globalTime = usePomodoroTimer((state) => state.globalTime);
+  const globalBreak = usePomodoroTimer((state) => state.globalBreak);
+
+  console.log("global", globalTime, globalBreak);
   const [started, setStarted] = React.useState(false);
-  const [time, setTime] = React.useState(30 * 60);
+  const [time, setTime] = React.useState(globalTime);
   const [timeBreak, setTimeBreak] = React.useState(false);
-  const [breakTime, setBreakTime] = React.useState(5);
   const minutes = Math.floor(time / 60);
   const seconds = time % 60;
   const isFirstRender = useRef(true);
-  const isTimerBoxOpen = true; // For now, always open. You can replace this with your state logic.
+
+  const breakMinutes =
+    globalBreak >= 60 ? Math.floor(globalBreak / 60) : globalBreak;
+
   useEffect(() => {
     if (!started) return;
 
@@ -33,15 +42,21 @@ const page = () => {
       return;
     }
     if (!timeBreak) {
-      setTime(5);
+      setTime(globalTime);
       errorToast("Time to study! 🧘‍♂️");
       setStarted(true);
     } else {
-      setTime(breakTime);
+      setTime(globalBreak);
       setStarted(true);
       successToast("Time for a break! 🧘‍♂️");
     }
   }, [timeBreak]);
+
+  useEffect(() => {
+    if (!started) {
+      setTime(globalTime);
+    }
+  }, [globalTime]);
 
   return (
     <DndContext>
@@ -52,7 +67,7 @@ const page = () => {
           <div className="bg-black/30 backdrop-blur-md rounded-3xl p-14 min-w-[370px] text-center">
             <span
               className="text-red-400 absolute top-5 right-5 font-bold cursor-pointer"
-              // onClick={() => toggleTimerBox()}
+              onClick={() => toggleTimerBox()}
             >
               X
             </span>
@@ -62,7 +77,7 @@ const page = () => {
                 className="px-6 py-1 font-bold rounded-lg cursor-pointer text-white border border-gray-500"
                 onClick={() => successToast("5 Minutes Break Added!")}
               >
-                {breakTime} Minutes Break
+                {breakMinutes} Minutes Break
               </button>
             </div>
 
@@ -82,7 +97,7 @@ const page = () => {
               <button
                 className="px-6 py-2 font-medium rounded-lg cursor-pointer bg-white/10 text-white"
                 onClick={() => {
-                  setTime(5);
+                  setTime(globalTime);
                   setStarted(false);
                 }}
               >

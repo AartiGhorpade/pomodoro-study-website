@@ -1,5 +1,9 @@
 "use client";
-import { fullScreen } from "@/app/store/useAppStore";
+import {
+  useFullScreen,
+  useSettings,
+  useTimerBox,
+} from "@/app/store/useAppStore";
 import {
   Music,
   Timer,
@@ -10,15 +14,14 @@ import {
 } from "lucide-react";
 
 export default function Sidebar() {
-  const toggleFullScreen = fullScreen((state) => state.toggleFullScreen);
-
-  console.log(toggleFullScreen);
-
+  const toggleFullScreen = useFullScreen((state) => state.toggleFullScreen);
+  const toggleTimerBox = useTimerBox((state) => state.toggleTimerBox);
+  const toggleSettingBox = useSettings((state) => state.toggleSettingBox);
   const menuItems = [
     { icon: Music, id: "music" },
-    { icon: Timer, id: "timer" },
+    { icon: Timer, id: "timer", fun: toggleTimerBox },
     { icon: MonitorPlay, id: "background" },
-    { icon: Settings, id: "settings" },
+    { icon: Settings, id: "settings", fun: toggleSettingBox },
     { icon: LayoutGrid, id: "layout" },
     { icon: Expand, id: "expand", fun: toggleFullScreen },
   ];
