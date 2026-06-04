@@ -1,3 +1,4 @@
+"use client";
 import {
   Music,
   Timer,
@@ -7,11 +8,6 @@ import {
   Expand,
 } from "lucide-react";
 
-type menuItems = {
-  icon: React.ReactNode;
-  id: string;
-};
-
 export default function Sidebar() {
   const menuItems = [
     { icon: Music, id: "music" },
@@ -19,8 +15,9 @@ export default function Sidebar() {
     { icon: MonitorPlay, id: "background" },
     { icon: Settings, id: "settings" },
     { icon: LayoutGrid, id: "layout" },
-    { icon: Expand, id: "focus" },
+    { icon: Expand, id: "expand" },
   ];
+
   return (
     <main className="relative h-screen overflow-hidden">
       {/* Background */}
@@ -31,7 +28,8 @@ export default function Sidebar() {
           {menuItems.map((item) => (
             <button
               key={item.id}
-              className="bg-[#000000] backdrop-blur-md p-3 rounded-xl"
+              className="bg-[#000000] backdrop-blur-md p-3 rounded-xl cursor-pointer hover:bg-[#000000]/80 transition-colors"
+              // onClick={() => item.fun?.()}
             >
               <item.icon size={24} className="text-white" />
             </button>
