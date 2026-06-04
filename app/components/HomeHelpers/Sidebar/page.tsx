@@ -1,4 +1,5 @@
 "use client";
+import { fullScreen } from "@/app/store/useAppStore";
 import {
   Music,
   Timer,
@@ -9,13 +10,17 @@ import {
 } from "lucide-react";
 
 export default function Sidebar() {
+  const toggleFullScreen = fullScreen((state) => state.toggleFullScreen);
+
+  console.log(toggleFullScreen);
+
   const menuItems = [
     { icon: Music, id: "music" },
     { icon: Timer, id: "timer" },
     { icon: MonitorPlay, id: "background" },
     { icon: Settings, id: "settings" },
     { icon: LayoutGrid, id: "layout" },
-    { icon: Expand, id: "expand" },
+    { icon: Expand, id: "expand", fun: toggleFullScreen },
   ];
 
   return (
@@ -29,7 +34,7 @@ export default function Sidebar() {
             <button
               key={item.id}
               className="bg-[#000000] backdrop-blur-md p-3 rounded-xl cursor-pointer hover:bg-[#000000]/80 transition-colors"
-              // onClick={() => item.fun?.()}
+              onClick={() => item.fun?.()}
             >
               <item.icon size={24} className="text-white" />
             </button>

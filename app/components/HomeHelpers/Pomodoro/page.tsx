@@ -6,7 +6,7 @@ import { successToast, errorToast } from "@/app/Helpers/Toasts";
 
 const page = () => {
   const [started, setStarted] = React.useState(false);
-  const [time, setTime] = React.useState(5);
+  const [time, setTime] = React.useState(30 * 60);
   const [timeBreak, setTimeBreak] = React.useState(false);
   const [breakTime, setBreakTime] = React.useState(5);
   const minutes = Math.floor(time / 60);
@@ -24,7 +24,6 @@ const page = () => {
       setTimeBreak((prev) => !prev);
       setStarted(false);
     }
-
     return () => clearInterval(interval);
   }, [started, time]);
 
