@@ -64,7 +64,7 @@ const page = () => {
       {/* <Draggable id="timer"> */}
       {isTimerBoxOpen && (
         <section className="flex-1 flex items-center justify-center absolute top-10 md:left-20 z-20">
-          <div className="bg-black/30 backdrop-blur-md rounded-3xl p-14 min-w-[370px] text-center">
+          <div className="bg-black/30 backdrop-blur-md rounded-3xl p-8 min-w-[320px] text-center">
             <span
               className="text-red-400 absolute top-5 right-5 font-bold cursor-pointer"
               onClick={() => toggleTimerBox()}
@@ -88,14 +88,14 @@ const page = () => {
 
             <div className="flex justify-center gap-8">
               <button
-                className="px-6 py-2 font-medium rounded-lg cursor-pointer bg-white text-black"
+                className="px-6 text-sm py-1 font-medium rounded-lg cursor-pointer bg-white text-black"
                 onClick={() => setStarted((prev) => !prev)}
               >
                 {started ? "Pause" : "Start"}
               </button>
 
               <button
-                className="px-6 py-2 font-medium rounded-lg cursor-pointer bg-white/10 text-white"
+                className="px-6 py-1 text-sm font-medium rounded-lg cursor-pointer bg-white/10 text-white"
                 onClick={() => {
                   setTime(globalTime);
                   setStarted(false);

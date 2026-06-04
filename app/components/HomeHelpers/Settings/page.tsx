@@ -58,7 +58,7 @@ const Page = () => {
           </div>
 
           {/* VOLUME */}
-          <div className="mb-4">
+          {/* <div className="mb-4">
             <p className="text-sm text-gray-300 mb-2">Alarm Volume</p>
 
             <input
@@ -67,7 +67,7 @@ const Page = () => {
               value={volume}
               onChange={(e) => setVolume(Number(e.target.value))}
             />
-          </div>
+          </div> */}
 
           {/* SAVE BUTTON */}
           <button

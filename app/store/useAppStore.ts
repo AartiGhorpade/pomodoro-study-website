@@ -57,24 +57,28 @@ type pomodoroTimer = {
   setGlobalBreak: (minutes: number) => void;
 };
 
-export const usePomodoroTimer = create(
+export const usePomodoroTimer = create<pomodoroTimer>()(
   persist(
     (set) => ({
       globalTime: 25 * 60,
       globalBreak: 5 * 60,
 
-      setGlobalTime: (minutes:number) =>
-        set(() => ({
-          globalTime: minutes * 60,
-        })),
+      setGlobalTime: (minutes: number) => set({ globalTime: minutes * 60 }),
 
-      setGlobalBreak: (minutes:number) =>
-        set(() => ({
-          globalBreak: minutes * 60,
-        })),
+      setGlobalBreak: (minutes: number) => set({ globalBreak: minutes * 60 }),
     }),
     {
-      name: "pomodoro-storage", // localStorage key
+      name: "pomodoro-storage",
     },
   ),
 );
+
+type openBackgroundGrid = {
+  isBgBoxOpen: boolean;
+  toggleBgBoxOpen: () => void;
+};
+
+export const useBgBoxOpen = create<openBackgroundGrid>((set) => ({
+  isBgBoxOpen: false,
+  toggleBgBoxOpen: () => {},
+}));
