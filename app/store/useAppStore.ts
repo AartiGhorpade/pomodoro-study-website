@@ -89,14 +89,13 @@ export const useBgBoxOpen = create<openBackgroundGrid>((set) => ({
 
 type backgroundSet = {
   bgUrl: string;
-
   setBg: (url: string) => void;
 };
 
 export const useBgUrl = create<backgroundSet>()(
   persist(
     (set) => ({
-      bgUrl: "https://picsum.photos/600/800?random=1",
+      bgUrl: "./backgrounds/videos/stream-2.mp4",
 
       setBg: (url: string) => set({ bgUrl: url }),
     }),
@@ -105,3 +104,17 @@ export const useBgUrl = create<backgroundSet>()(
     },
   ),
 );
+
+type quotes = {
+  isQuotesBoxOpen: boolean;
+  toggleQuotesBox: () => void;
+};
+
+export const useQuotes = create<quotes>((set) => ({
+  isQuotesBoxOpen: true,
+  toggleQuotesBox: () => {
+    set((state) => ({
+      isQuotesBoxOpen: !state.isQuotesBoxOpen,
+    }));
+  },
+}));

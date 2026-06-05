@@ -4,6 +4,7 @@ import Pomodoro from "./components/HomeHelpers/Pomodoro/page";
 import Settings from "./components/HomeHelpers/Settings/page";
 // import MusicPlayer from "./components/HomeHelpers/MusicPlayer/page";
 import ImgVidList from "@/app/components/HomeHelpers/Background/ImgVidList/page";
+import Quotes from "@/app/components/HomeHelpers/Quotes/page";
 
 export default function Home() {
   return (
@@ -14,6 +15,7 @@ export default function Home() {
       <Settings />
       {/* <MusicPlayer /> */}
       <ImgVidList />
+      <Quotes />
     </div>
   );
 }

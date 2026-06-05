@@ -12,6 +12,7 @@ import {
   Settings,
   LayoutGrid,
   Expand,
+  Quote,
 } from "lucide-react";
 
 export default function Sidebar() {
@@ -25,8 +26,9 @@ export default function Sidebar() {
     { icon: Timer, id: "timer", fun: toggleTimerBox },
     { icon: MonitorPlay, id: "background", fun: toggleBgBoxOpen },
     { icon: Settings, id: "settings", fun: toggleSettingBox },
-    { icon: LayoutGrid, id: "layout" },
+    // { icon: LayoutGrid, id: "layout" },
     { icon: Expand, id: "expand", fun: toggleFullScreen },
+    { icon: Quote, id: "quotes" },
   ];
 
   return (
