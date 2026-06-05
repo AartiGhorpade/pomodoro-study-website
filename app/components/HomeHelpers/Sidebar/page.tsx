@@ -35,7 +35,7 @@ export default function Sidebar() {
 
       <div className="relative z-10 h-full flex">
         {/* Sidebar */}
-        <aside className="w-20 h-full flex flex-col items-center justify-center gap-4">
+        <aside className="w-20 h-full flex flex-col items-center mt-10 gap-4">
           {menuItems.map((item) => (
             <button
               key={item.id}

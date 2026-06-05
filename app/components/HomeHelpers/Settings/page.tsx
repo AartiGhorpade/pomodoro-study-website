@@ -1,8 +1,7 @@
 "use client";
 import { usePomodoroTimer, useSettings } from "@/app/store/useAppStore";
-import { useEffect, useState } from "react";
-
-/* ================= PAGE ================= */
+import { useEffect, useState, useRef } from "react";
+import Draggable from "react-draggable";
 
 const Page = () => {
   const time = usePomodoroTimer((state) => state.globalTime);
@@ -27,7 +26,7 @@ const Page = () => {
   return (
     isSettingsBoxOpen && (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
-        <div className="w-[420px] rounded-2xl bg-[#1e2430] text-white shadow-xl p-5 relative">
+        <div className="w-[420px] bg-black/60 backdrop-blur-md p-8 text-white shadow-xl relative">
           {/* Close button */}
           <button
             onClick={toggleSettingBox}

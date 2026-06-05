@@ -1,5 +1,7 @@
 "use client";
+import { useRef } from "react"; // 1. Import useRef
 import { useBgBoxOpen, useBgUrl } from "@/app/store/useAppStore";
+import Draggable from "react-draggable";
 
 const spaces = [
   {
@@ -29,39 +31,46 @@ const Page = () => {
   const toggleBgBoxOpen = useBgBoxOpen((state) => state.toggleBgBoxOpen);
   const setBg = useBgUrl((state) => state.setBg);
 
+  const nodeRef = useRef<HTMLElement>(null);
+
   return (
     isBgBoxOpen && (
-      <main className="bg-zinc-950 p-4 absolute top-10 left-20 w-[420px] z-30">
-        <div className="mx-auto">
-          <p className="mb-4 text-md font-bold text-white">
-            Explore Backgrounds
-          </p>
-          <span
-            className="text-red-400 absolute top-5 right-5 font-bold cursor-pointer"
-            onClick={() => toggleBgBoxOpen()}
-          >
-            X
-          </span>
-          <div className="grid md:grid-cols-2 gap-6">
-            {spaces.map((space) => (
-              <div
-                key={space.id}
-                className="group cursor-pointer overflow-hidden rounded-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-black/50"
-              >
-                <div className="overflow-hidden">
-                  <video
-                    src={space.video}
-                    className="w-[180px] h-[100px] object-cover transition-transform duration-500 group-hover:scale-105"
-                    onClick={() => {
-                      setBg(space.video);
-                    }}
-                  />
+      <Draggable nodeRef={nodeRef} bounds="body">
+        <main
+          ref={nodeRef}
+          className="p-4 absolute top-10 left-20 w-[420px] z-30 select-none"
+        >
+          <div className="mx-auto bg-black/60 backdrop-blur-md pb-6 px-6">
+            <p className="mb-4 text-md font-bold text-white cursor-move pt-6">
+              Explore Backgrounds
+            </p>
+            <span
+              className="text-red-400 absolute top-5 right-5 font-bold cursor-pointer"
+              onClick={() => toggleBgBoxOpen()}
+            >
+              X
+            </span>
+            <div className="grid md:grid-cols-2 gap-6">
+              {spaces.map((space) => (
+                <div
+                  key={space.id}
+                  className="group cursor-pointer overflow-hidden rounded-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-black/50"
+                >
+                  <div className="overflow-hidden">
+                    <video
+                      src={space.video}
+                      className="w-[180px] h-[100px] object-cover transition-transform duration-500 group-hover:scale-105"
+                      onClick={() => {
+                        setBg(space.video);
+                      }}
+                    />
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
-      </main>
+        </main>
+      </Draggable>
     )
   );
 };
