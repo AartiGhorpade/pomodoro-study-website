@@ -80,5 +80,28 @@ type openBackgroundGrid = {
 
 export const useBgBoxOpen = create<openBackgroundGrid>((set) => ({
   isBgBoxOpen: false,
-  toggleBgBoxOpen: () => {},
+  toggleBgBoxOpen: () => {
+    set((state) => ({
+      isBgBoxOpen: !state.isBgBoxOpen,
+    }));
+  },
 }));
+
+type backgroundSet = {
+  bgUrl: string;
+
+  setBg: (url: string) => void;
+};
+
+export const useBgUrl = create<backgroundSet>()(
+  persist(
+    (set) => ({
+      bgUrl: "https://picsum.photos/600/800?random=1",
+
+      setBg: (url: string) => set({ bgUrl: url }),
+    }),
+    {
+      name: "bgUrl",
+    },
+  ),
+);

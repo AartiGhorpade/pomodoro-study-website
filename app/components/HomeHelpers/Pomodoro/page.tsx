@@ -11,7 +11,7 @@ const page = () => {
   const globalTime = usePomodoroTimer((state) => state.globalTime);
   const globalBreak = usePomodoroTimer((state) => state.globalBreak);
 
-  console.log("global", globalTime, globalBreak);
+  
   const [started, setStarted] = React.useState(false);
   const [time, setTime] = React.useState(globalTime);
   const [timeBreak, setTimeBreak] = React.useState(false);

@@ -3,6 +3,7 @@ import Sidebar from "./components/HomeHelpers/Sidebar/page";
 import Pomodoro from "./components/HomeHelpers/Pomodoro/page";
 import Settings from "./components/HomeHelpers/Settings/page";
 // import MusicPlayer from "./components/HomeHelpers/MusicPlayer/page";
+import ImgVidList from "@/app/components/HomeHelpers/Background/ImgVidList/page";
 
 export default function Home() {
   return (
@@ -12,6 +13,7 @@ export default function Home() {
       <Pomodoro />
       <Settings />
       {/* <MusicPlayer /> */}
+      <ImgVidList />
     </div>
   );
 }

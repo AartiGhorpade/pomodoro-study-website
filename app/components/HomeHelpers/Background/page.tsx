@@ -1,68 +1,27 @@
 "use client";
-import React from "react";
-
-type backgrounds = {
-  src: string;
-  alt: string;
-  id: number;
-  type: "image" | "video";
-};
+import { useBgUrl } from "@/app/store/useAppStore";
+import React, { useEffect } from "react";
 
 const page = () => {
-  const [currentBackground, setCurrentBackground] = React.useState<backgrounds>(
-    {
-      id: 1,
-      type: "image",
-      src: "/backgrounds/images/girl-on-terrace.jpg",
-      alt: "Lofi Room",
-    },
-  );
+  const bgUrl = useBgUrl((state) => state.bgUrl);
+  const [currentBackground, setCurrentBackground] = React.useState(bgUrl);
 
-  const backgrounds = [
-    {
-      id: "1",
-      type: "video",
-      src: "/backgrounds/videos/tree-nature.mp4",
-      title: "Tree Nature",
-    },
-    {
-      id: "2",
-      type: "video",
-      src: "/backgrounds/rain.mp4",
-      title: "Rain",
-    },
-    {
-      id: "3",
-      type: "image",
-      src: "/backgrounds/mountain.jpg",
-      title: "Mountain",
-    },
-    {
-      id: "4",
-      type: "image",
-      src: "/backgrounds/cafe.jpg",
-      title: "Cafe",
-    },
-  ];
+  useEffect(() => {
+    setCurrentBackground(bgUrl);
+  }, [bgUrl]);
+
+
   return (
     <div>
-      {currentBackground.type === "video" ? (
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="absolute inset-0 h-full w-full object-cover"
-        >
-          <source src={currentBackground.src} type="video/mp4" />
-        </video>
-      ) : (
-        <img
-          src={currentBackground.src}
-          alt=""
-          className="absolute inset-0 h-full w-full object-cover"
-        />
-      )}
+      <video
+        key={currentBackground}
+        src={currentBackground}
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="absolute inset-0 h-full w-full object-cover"
+      />
     </div>
   );
 };

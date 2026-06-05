@@ -1,5 +1,6 @@
 "use client";
 import {
+  useBgBoxOpen,
   useFullScreen,
   useSettings,
   useTimerBox,
@@ -17,10 +18,12 @@ export default function Sidebar() {
   const toggleFullScreen = useFullScreen((state) => state.toggleFullScreen);
   const toggleTimerBox = useTimerBox((state) => state.toggleTimerBox);
   const toggleSettingBox = useSettings((state) => state.toggleSettingBox);
+  const toggleBgBoxOpen = useBgBoxOpen((state) => state.toggleBgBoxOpen);
+
   const menuItems = [
     { icon: Music, id: "music" },
     { icon: Timer, id: "timer", fun: toggleTimerBox },
-    { icon: MonitorPlay, id: "background" },
+    { icon: MonitorPlay, id: "background", fun: toggleBgBoxOpen },
     { icon: Settings, id: "settings", fun: toggleSettingBox },
     { icon: LayoutGrid, id: "layout" },
     { icon: Expand, id: "expand", fun: toggleFullScreen },
