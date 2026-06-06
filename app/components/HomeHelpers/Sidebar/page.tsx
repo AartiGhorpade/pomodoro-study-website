@@ -2,6 +2,7 @@
 import {
   useBgBoxOpen,
   useFullScreen,
+  useQuotes,
   useSettings,
   useTimerBox,
 } from "@/app/store/useAppStore";
@@ -10,25 +11,28 @@ import {
   Timer,
   Image as MonitorPlay,
   Settings,
-  LayoutGrid,
   Expand,
   Quote,
 } from "lucide-react";
+
+import { FaSpotify } from "react-icons/fa";
 
 export default function Sidebar() {
   const toggleFullScreen = useFullScreen((state) => state.toggleFullScreen);
   const toggleTimerBox = useTimerBox((state) => state.toggleTimerBox);
   const toggleSettingBox = useSettings((state) => state.toggleSettingBox);
   const toggleBgBoxOpen = useBgBoxOpen((state) => state.toggleBgBoxOpen);
+  const toggleQuotesBox = useQuotes((state) => state.toggleQuotesBox);
 
   const menuItems = [
     { icon: Music, id: "music" },
+    { icon: FaSpotify, id: "spotify" },
     { icon: Timer, id: "timer", fun: toggleTimerBox },
     { icon: MonitorPlay, id: "background", fun: toggleBgBoxOpen },
     { icon: Settings, id: "settings", fun: toggleSettingBox },
     // { icon: LayoutGrid, id: "layout" },
     { icon: Expand, id: "expand", fun: toggleFullScreen },
-    { icon: Quote, id: "quotes" },
+    { icon: Quote, id: "quotes", fun: toggleQuotesBox },
   ];
 
   return (

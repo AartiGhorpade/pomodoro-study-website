@@ -27,9 +27,9 @@ const Page = () => {
 
   return (
     isQuotesBoxOpen && (
-      <div className="h-auto flex items-center justify-center text-white px-4 pb-4 absolute top-0 left-0 w-full z-20">
+      <div>
         <Draggable nodeRef={nodeRef} bounds="body">
-          <div ref={nodeRef}>
+          <div ref={nodeRef} className="absolute top-0 left-90 z-20">
             <span
               className="text-red-400 absolute top-3 right-5 z-50 font-bold cursor-pointer"
               onClick={() => toggleQuotesBox()}
