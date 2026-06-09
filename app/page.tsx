@@ -6,7 +6,7 @@ import Settings from "./components/HomeHelpers/Settings/page";
 import ImgVidList from "@/app/components/HomeHelpers/Background/ImgVidList/page";
 import Quotes from "@/app/components/HomeHelpers/Quotes/page";
 import Sounds from "@/app/components/HomeHelpers/Music/Sounds/page";
-
+import Spotify from "@/app/components/HomeHelpers/Music/Spotify/page";
 
 export default function Home() {
   return (
@@ -18,7 +18,8 @@ export default function Home() {
       {/* <MusicPlayer /> */}
       <ImgVidList />
       <Quotes />
-      <Sounds/>
+      <Sounds />
+      <Spotify />
     </div>
   );
 }

@@ -111,10 +111,55 @@ type quotes = {
 };
 
 export const useQuotes = create<quotes>((set) => ({
-  isQuotesBoxOpen: true,
+  isQuotesBoxOpen: false,
   toggleQuotesBox: () => {
     set((state) => ({
       isQuotesBoxOpen: !state.isQuotesBoxOpen,
+    }));
+  },
+}));
+
+type Sounds = {
+  isSoundsBoxOpen: boolean;
+  isSoundsOn: boolean;
+
+  toggleSoundsBox: () => void;
+  toggleSounds: () => void;
+};
+
+export const useSound = create<Sounds>()(
+  persist(
+    (set) => ({
+      isSoundsBoxOpen: false,
+      isSoundsOn: true,
+
+      toggleSoundsBox: () =>
+        set((state) => ({
+          isSoundsBoxOpen: !state.isSoundsBoxOpen,
+        })),
+
+      toggleSounds: () =>
+        set((state) => ({
+          isSoundsOn: !state.isSoundsOn,
+        })),
+    }),
+    {
+      name: "sound-storage",
+    }
+  )
+);
+
+
+type spotify = {
+  isSpotifyBoxOpen: boolean;
+  toggleSpotifyBox: () => void;
+};
+
+export const useSpotify = create<spotify>((set) => ({
+  isSpotifyBoxOpen: false,
+  toggleSpotifyBox: () => {
+    set((state) => ({
+      isSpotifyBoxOpen: !state.isSpotifyBoxOpen,
     }));
   },
 }));

@@ -4,6 +4,8 @@ import {
   useFullScreen,
   useQuotes,
   useSettings,
+  useSound,
+  useSpotify,
   useTimerBox,
 } from "@/app/store/useAppStore";
 import {
@@ -23,10 +25,12 @@ export default function Sidebar() {
   const toggleSettingBox = useSettings((state) => state.toggleSettingBox);
   const toggleBgBoxOpen = useBgBoxOpen((state) => state.toggleBgBoxOpen);
   const toggleQuotesBox = useQuotes((state) => state.toggleQuotesBox);
+  const toggleSoundsBox = useSound((state) => state.toggleSoundsBox);
+  const toggleSpotifyBox = useSpotify((state) => state.toggleSpotifyBox);
 
   const menuItems = [
-    { icon: Music, id: "music" },
-    { icon: FaSpotify, id: "spotify" },
+    { icon: Music, id: "music", fun: toggleSoundsBox },
+    { icon: FaSpotify, id: "spotify", fun: toggleSpotifyBox },
     { icon: Timer, id: "timer", fun: toggleTimerBox },
     { icon: MonitorPlay, id: "background", fun: toggleBgBoxOpen },
     { icon: Settings, id: "settings", fun: toggleSettingBox },
