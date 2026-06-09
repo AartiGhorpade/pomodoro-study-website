@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Draggable from "react-draggable";
 import { Play, Pause } from "lucide-react";
-import { useSound } from "@/app/store/useAppStore";
+import { useSound } from "@/app/store/useMusicStore";
 
 const Page = () => {
   const nodeRef = useRef<HTMLElement>(null);
@@ -17,7 +17,6 @@ const Page = () => {
   const isSoundsBoxOpen = useSound((state) => state.isSoundsBoxOpen);
   const toggleSounds = useSound((state) => state.toggleSounds);
   const toggleSoundsBox = useSound((state) => state.toggleSoundsBox);
-
 
   const sounds = [
     {
@@ -168,6 +167,11 @@ const Page = () => {
                 <span
                   className="text-red-400 absolute top-3 right-5 font-bold cursor-pointer"
                   onClick={() => toggleSoundsBox()}
+                  onTouchEnd={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    toggleSoundsBox();
+                  }}
                 >
                   X
                 </span>

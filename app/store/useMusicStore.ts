@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 type Station = {
   id: string;
@@ -43,4 +44,62 @@ export const useMusicPlayer = create<MusicState>((set) => ({
     set(() => ({
       volume: value,
     })),
+}));
+
+type Sounds = {
+  isSoundsBoxOpen: boolean;
+  isSoundsOn: boolean;
+
+  toggleSoundsBox: () => void;
+  toggleSounds: () => void;
+};
+
+export const useSound = create<Sounds>()(
+  persist(
+    (set) => ({
+      isSoundsBoxOpen: false,
+      isSoundsOn: true,
+
+      toggleSoundsBox: () =>
+        set((state) => ({
+          isSoundsBoxOpen: !state.isSoundsBoxOpen,
+        })),
+
+      toggleSounds: () =>
+        set((state) => ({
+          isSoundsOn: !state.isSoundsOn,
+        })),
+    }),
+    {
+      name: "sound-storage",
+    },
+  ),
+);
+
+type spotify = {
+  isSpotifyBoxOpen: boolean;
+  toggleSpotifyBox: () => void;
+};
+
+export const useSpotify = create<spotify>((set) => ({
+  isSpotifyBoxOpen: false,
+  toggleSpotifyBox: () => {
+    set((state) => ({
+      isSpotifyBoxOpen: !state.isSpotifyBoxOpen,
+    }));
+  },
+}));
+
+type youtube = {
+  isYtBoxOpen: boolean;
+  toggleYTBox: () => void;
+};
+
+export const useYoutube = create<youtube>((set) => ({
+  isYtBoxOpen: false,
+  toggleYTBox: () => {
+    set((state) => ({
+      isYtBoxOpen: !state.isYtBoxOpen,
+    }));
+  },
 }));

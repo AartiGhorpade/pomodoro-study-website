@@ -69,12 +69,8 @@ const page = () => {
             <div className="bg-black/30 backdrop-blur-md px-8 pb-8 min-w-[320px] text-center">
               <span
                 className="text-red-400 absolute top-5 right-5 font-bold cursor-pointer"
+                onClick={() => toggleTimerBox()}
                 onTouchEnd={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  toggleTimerBox();
-                }}
-                onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
                   toggleTimerBox();

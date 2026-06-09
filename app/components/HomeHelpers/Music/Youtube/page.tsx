@@ -1,6 +1,6 @@
 "use client";
 
-import { useYoutube } from "@/app/store/useAppStore";
+import { useYoutube } from "@/app/store/useMusicStore";
 import { useRef, useState } from "react";
 import Draggable from "react-draggable";
 
@@ -10,7 +10,7 @@ export default function Youtube() {
   const toggleYTBox = useYoutube((state) => state.toggleYTBox);
 
   const isYtBoxOpen = useYoutube((state) => state.isYtBoxOpen);
-  const [isDragging, setIsDragging] = useState(false);
+
   const [youtubeUrl, setYoutubeUrl] = useState(
     "https://www.youtube.com/embed/n61ULEU7CO0",
   );
@@ -39,27 +39,17 @@ export default function Youtube() {
   };
   return (
     isYtBoxOpen && (
-      <Draggable
-        nodeRef={nodeRef}
-        bounds="body"
-        handle=".drag-handle"
-        onStart={() => setIsDragging(true)}
-        onStop={() => setIsDragging(false)}
-      >
-        <div ref={nodeRef} className="absolute top-0 right-20 z-50">
+      <Draggable nodeRef={nodeRef} bounds="body" handle=".drag-handle">
+        <div ref={nodeRef} className="absolute top-0 right-0 md:right-20 z-50">
           <div className="bg-black/70 backdrop-blur-md rounded-xl p-5 min-w-[400px] h-[340px] shadow-2xl">
             {/* Header */}
             <div className="drag-handle flex justify-between items-center mb-4 cursor-move">
               <h2 className="text-white font-semibold text-lg">YouTube</h2>
 
               <button
-                className="relative z-[9999] text-red-400 hover:text-red-300 cursor-pointer"
+                className="text-red-400 hover:text-red-300 cursor-pointer"
+                onClick={() => toggleYTBox()}
                 onTouchEnd={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  toggleYTBox();
-                }}
-                onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
                   toggleYTBox();

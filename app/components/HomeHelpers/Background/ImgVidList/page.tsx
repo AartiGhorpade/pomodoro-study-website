@@ -50,7 +50,7 @@ const Page = () => {
       <main
         ref={nodeRef}
         className="
-          absolute top-5 left-20 z-30 select-none
+          absolute top-5 left-0 md:left-20 z-30 select-none
           w-[420px] md:w-[420px]
           max-md:w-[95vw]
           max-md:left-1/2
@@ -67,6 +67,11 @@ const Page = () => {
             <button
               className="text-red-400 font-bold cursor-pointer"
               onClick={toggleBgBoxOpen}
+              onTouchEnd={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                toggleBgBoxOpen();
+              }}
             >
               X
             </button>

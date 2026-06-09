@@ -1,6 +1,6 @@
 "use client";
 
-import { useSpotify } from "@/app/store/useAppStore";
+import { useSpotify } from "@/app/store/useMusicStore";
 import { useRef, useState } from "react";
 import Draggable from "react-draggable";
 
@@ -44,6 +44,11 @@ export default function SpotifyWidget() {
               <button
                 className="text-red-400 hover:text-red-300 cursor-pointer font-bold"
                 onClick={() => toggleSpotifyBox()}
+                onTouchEnd={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  toggleSpotifyBox();
+                }}
               >
                 X
               </button>

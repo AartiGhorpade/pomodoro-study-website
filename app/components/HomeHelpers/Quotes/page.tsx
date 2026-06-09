@@ -36,6 +36,11 @@ const Page = () => {
             <span
               className="text-red-400 absolute top-3 right-5 z-50 font-bold cursor-pointer"
               onClick={() => toggleQuotesBox()}
+              onTouchEnd={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                toggleQuotesBox();
+              }}
             >
               X
             </span>
