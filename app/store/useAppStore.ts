@@ -163,3 +163,17 @@ export const useSpotify = create<spotify>((set) => ({
     }));
   },
 }));
+
+type youtube = {
+  isYtBoxOpen: boolean;
+  toggleYTBox: () => void;
+};
+
+export const useYoutube = create<youtube>((set) => ({
+  isYtBoxOpen: false,
+  toggleYTBox: () => {
+    set((state) => ({
+      isYtBoxOpen: !state.isYtBoxOpen,
+    }));
+  },
+}));

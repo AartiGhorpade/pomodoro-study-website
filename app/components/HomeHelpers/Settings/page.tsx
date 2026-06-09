@@ -25,7 +25,7 @@ const Page = () => {
 
   return (
     isSettingsBoxOpen && (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
+      <div className="fixed inset-0 z-70 flex items-center justify-center bg-black/60">
         <div className="w-[420px] bg-black/60 backdrop-blur-md p-8 text-white shadow-xl relative">
           {/* Close button */}
           <button

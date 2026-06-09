@@ -1,30 +1,40 @@
 "use client";
-import { useRef } from "react"; // 1. Import useRef
-import { useBgBoxOpen, useBgUrl } from "@/app/store/useAppStore";
-import Draggable from "react-draggable";
 
-const spaces = [
-  {
-    id: 1,
-    title: "Rainy Cafe",
-    video: "./backgrounds/videos/girl-study-room.mp4",
-  },
-  {
-    id: 2,
-    title: "Forest Cabin",
-    video: "./backgrounds/videos/stream-2.mp4",
-  },
-  {
-    id: 3,
-    title: "Cozy Room",
-    video: "./backgrounds/videos/stream.mp4",
-  },
-  {
-    id: 4,
-    title: "Mountain View",
-    video: "./backgrounds/videos/tree-nature.mp4",
-  },
+import { useRef } from "react";
+import Draggable from "react-draggable";
+import { useBgBoxOpen, useBgUrl } from "@/app/store/useAppStore";
+
+const videos = [
+  "avtar.mp4",
+  "boy.mp4",
+  "boy-2.mp4",
+  "boy-3.mp4",
+  "bus.mp4",
+  "cat.mp4",
+  "computers.mp4",
+  "flours.mp4",
+  "fuji.mp4",
+  "girl.mp4",
+  "girl-1.mp4",
+  "girl-2.mp4",
+  "girl-3.mp4",
+  "girl-4.mp4",
+  "girl-study-room.mp4",
+  "house.mp4",
+  "lights.mp4",
+  "lofi-girl.mp4",
+  "mountain.mp4",
+  "night-mountain.mp4",
+  "stream.mp4",
+  "stream-2.mp4",
+  "tree-nature.mp4",
 ];
+
+const spaces = videos.map((video, index) => ({
+  id: index + 1,
+  title: video.replace(".mp4", ""),
+  video: `/backgrounds/videos/${video}`,
+}));
 
 const Page = () => {
   const isBgBoxOpen = useBgBoxOpen((state) => state.isBgBoxOpen);
@@ -33,45 +43,58 @@ const Page = () => {
 
   const nodeRef = useRef<HTMLElement>(null);
 
+  if (!isBgBoxOpen) return null;
+
   return (
-    isBgBoxOpen && (
-      <Draggable nodeRef={nodeRef} bounds="body">
-        <main
-          ref={nodeRef}
-          className="p-4 absolute top-10 left-20 w-[420px] z-30 select-none"
-        >
-          <div className="mx-auto bg-black/60 backdrop-blur-md pb-6 px-6">
-            <p className="mb-4 text-md font-bold text-white cursor-move pt-6">
+    <Draggable nodeRef={nodeRef} bounds="body">
+      <main
+        ref={nodeRef}
+        className="
+          absolute top-5 left-20 z-30 select-none
+          w-[420px] md:w-[420px]
+          max-md:w-[95vw]
+          max-md:left-1/2
+          max-md:-translate-x-1/2
+          max-md:top-20
+        "
+      >
+        <div className="bg-black/60 backdrop-blur-md p-6 rounded-lg">
+          <div className="flex items-center justify-between mb-4">
+            <p className="text-md font-bold text-white cursor-move">
               Explore Backgrounds
             </p>
-            <span
-              className="text-red-400 absolute top-5 right-5 font-bold cursor-pointer"
-              onClick={() => toggleBgBoxOpen()}
+
+            <button
+              className="text-red-400 font-bold cursor-pointer"
+              onClick={toggleBgBoxOpen}
             >
-              X
-            </span>
-            <div className="grid md:grid-cols-2 gap-6">
-              {spaces.map((space) => (
-                <div
-                  key={space.id}
-                  className="group cursor-pointer overflow-hidden rounded-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-black/50"
-                >
-                  <div className="overflow-hidden">
-                    <video
-                      src={space.video}
-                      className="w-[180px] h-[100px] object-cover transition-transform duration-500 group-hover:scale-105"
-                      onClick={() => {
-                        setBg(space.video);
-                      }}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
+              ✕
+            </button>
           </div>
-        </main>
-      </Draggable>
-    )
+
+          <div className="grid grid-cols-2 gap-4 max-h-[400px] overflow-y-auto custom-scrollbar pr-1">
+            {spaces.map((space) => (
+              <div
+                key={space.id}
+                className="group cursor-pointer overflow-hidden rounded-lg"
+                onClick={() => setBg(space.video)}
+              >
+                <video
+                  src={space.video}
+                  muted
+                  preload="metadata"
+                  className="w-full h-24 object-cover rounded-lg transition-transform duration-300 group-hover:scale-105"
+                />
+
+                {/* <p className="text-white text-xs text-center mt-2 capitalize truncate">
+                  {space.title}
+                </p> */}
+              </div>
+            ))}
+          </div>
+        </div>
+      </main>
+    </Draggable>
   );
 };
 

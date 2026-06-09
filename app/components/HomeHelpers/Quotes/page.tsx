@@ -29,7 +29,10 @@ const Page = () => {
     isQuotesBoxOpen && (
       <div>
         <Draggable nodeRef={nodeRef} bounds="body">
-          <div ref={nodeRef} className="absolute top-0 left-90 z-20">
+          <div
+            ref={nodeRef}
+            className="absolute top-0 left-1/2 -translate-x-1/2 z-60"
+          >
             <span
               className="text-red-400 absolute top-3 right-5 z-50 font-bold cursor-pointer"
               onClick={() => toggleQuotesBox()}
@@ -39,7 +42,7 @@ const Page = () => {
             <div className="w-auto bg-black/60 backdrop-blur-md border border-white/10 p-4 shadow-2xl cursor-move">
               <Quote className="w-5 h-5 text-gray-400 mb-3" />
 
-              <blockquote className="text-md font-medium leading-relaxed">
+              <blockquote className="text-md font-medium leading-relaxed text-wrap w-[300px]">
                 "{quote}"
               </blockquote>
 

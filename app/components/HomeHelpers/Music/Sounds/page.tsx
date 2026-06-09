@@ -157,7 +157,7 @@ const Page = () => {
 
   return (
     isSoundsBoxOpen && (
-      <div className="fixed inset-0 z-20 pointer-events-none">
+      <div className="fixed inset-0 z-60 pointer-events-none">
         <Draggable nodeRef={nodeRef} bounds="parent">
           <section
             ref={nodeRef}
