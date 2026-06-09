@@ -53,8 +53,17 @@ export default function Youtube() {
               <h2 className="text-white font-semibold text-lg">YouTube</h2>
 
               <button
-                className="text-red-400 hover:text-red-300 cursor-pointer z-50"
-                onClick={() => toggleYTBox()}
+                className="relative z-[9999] text-red-400 hover:text-red-300 cursor-pointer"
+                onTouchEnd={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  toggleYTBox();
+                }}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  toggleYTBox();
+                }}
               >
                 ✕
               </button>
