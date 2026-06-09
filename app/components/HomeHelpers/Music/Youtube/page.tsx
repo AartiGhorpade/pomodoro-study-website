@@ -10,7 +10,7 @@ export default function Youtube() {
   const toggleYTBox = useYoutube((state) => state.toggleYTBox);
 
   const isYtBoxOpen = useYoutube((state) => state.isYtBoxOpen);
-
+  const [isDragging, setIsDragging] = useState(false);
   const [youtubeUrl, setYoutubeUrl] = useState(
     "https://www.youtube.com/embed/n61ULEU7CO0",
   );
@@ -39,7 +39,13 @@ export default function Youtube() {
   };
   return (
     isYtBoxOpen && (
-      <Draggable nodeRef={nodeRef} bounds="body" handle=".drag-handle">
+      <Draggable
+        nodeRef={nodeRef}
+        bounds="body"
+        handle=".drag-handle"
+        onStart={() => setIsDragging(true)}
+        onStop={() => setIsDragging(false)}
+      >
         <div ref={nodeRef} className="absolute top-0 right-20 z-50">
           <div className="bg-black/70 backdrop-blur-md rounded-xl p-5 min-w-[400px] h-[340px] shadow-2xl">
             {/* Header */}
@@ -47,7 +53,7 @@ export default function Youtube() {
               <h2 className="text-white font-semibold text-lg">YouTube</h2>
 
               <button
-                className="text-red-400 hover:text-red-300 cursor-pointer"
+                className="text-red-400 hover:text-red-300 cursor-pointer z-50"
                 onClick={() => toggleYTBox()}
               >
                 ✕
@@ -63,6 +69,7 @@ export default function Youtube() {
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
                 loading="lazy"
+                className="pointer-events-none"
               />
             </div>
 

@@ -68,7 +68,7 @@ const Page = () => {
               className="text-red-400 font-bold cursor-pointer"
               onClick={toggleBgBoxOpen}
             >
-              ✕
+              X
             </button>
           </div>
 
