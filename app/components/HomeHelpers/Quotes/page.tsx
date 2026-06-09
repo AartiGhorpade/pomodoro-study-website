@@ -8,7 +8,7 @@ import Draggable from "react-draggable";
 const Page = () => {
   const [quote, setQuote] = useState("");
   const [author, setAuthor] = useState("");
-  const nodeRef = useRef<HTMLElement>(null);
+  const nodeRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const getQuote = async () => {
