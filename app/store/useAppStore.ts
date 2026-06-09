@@ -95,7 +95,7 @@ type backgroundSet = {
 export const useBgUrl = create<backgroundSet>()(
   persist(
     (set) => ({
-      bgUrl: "./backgrounds/videos/stream-2.mp4",
+      bgUrl: "./backgrounds/videos/girl-4.mp4",
 
       setBg: (url: string) => set({ bgUrl: url }),
     }),
@@ -145,10 +145,9 @@ export const useSound = create<Sounds>()(
     }),
     {
       name: "sound-storage",
-    }
-  )
+    },
+  ),
 );
-
 
 type spotify = {
   isSpotifyBoxOpen: boolean;
