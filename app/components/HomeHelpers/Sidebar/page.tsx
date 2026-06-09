@@ -19,11 +19,10 @@ import {
   useFullScreen,
   useQuotes,
   useSettings,
-  useSound,
-  useSpotify,
   useTimerBox,
-  useYoutube,
 } from "@/app/store/useAppStore";
+
+import { useSound, useSpotify, useYoutube } from "@/app/store/useMusicStore";
 
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
