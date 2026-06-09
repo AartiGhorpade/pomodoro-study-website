@@ -10,7 +10,6 @@ const page = () => {
     setCurrentBackground(bgUrl);
   }, [bgUrl]);
 
-
   return (
     <div>
       <video

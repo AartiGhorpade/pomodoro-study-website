@@ -77,7 +77,7 @@ export default function Sidebar() {
           max-lg:h-screen
           lg:h-full
           overflow-y-auto
-          max-lg:pb-10
+          max-lg:pb-20
           w-20
           bg-transparent
           flex flex-col items-center mt-12 md:mt-2 gap-2

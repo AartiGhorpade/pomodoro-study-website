@@ -8,7 +8,7 @@ import Draggable from "react-draggable";
 const Page = () => {
   const [quote, setQuote] = useState("");
   const [author, setAuthor] = useState("");
-  const nodeRef = useRef<HTMLDivElement>(null);
+  const nodeRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const getQuote = async () => {
@@ -28,10 +28,10 @@ const Page = () => {
   return (
     isQuotesBoxOpen && (
       <div>
-        <Draggable nodeRef={nodeRef} bounds="body" handle=".drag-handle">
-          <div
+        <Draggable nodeRef={nodeRef} bounds="body">
+          <section
             ref={nodeRef}
-            className="absolute top-14 md:top-0 left-1/2 -translate-x-1/2 z-60"
+            className="absolute lg:top-14 top-10 sm:top-0 md:top-5 right-5 lg:right-50 z-60"
           >
             <span
               className="text-red-400 absolute top-3 right-5 z-50 font-bold cursor-pointer"
@@ -56,7 +56,7 @@ const Page = () => {
                 <p className="text-gray-400 text-sm font-semibold">{author}</p>
               </div>
             </div>
-          </div>
+          </section>
         </Draggable>
       </div>
     )
