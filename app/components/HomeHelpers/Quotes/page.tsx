@@ -28,7 +28,7 @@ const Page = () => {
   return (
     isQuotesBoxOpen && (
       <div>
-        <Draggable nodeRef={nodeRef} bounds="body">
+        <Draggable nodeRef={nodeRef} bounds="body" handle=".drag-handle">
           <div
             ref={nodeRef}
             className="absolute top-0 left-1/2 -translate-x-1/2 z-60"

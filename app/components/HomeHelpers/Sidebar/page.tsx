@@ -75,6 +75,7 @@ export default function Sidebar() {
           fixed md:relative
           lg:top-0 left-0 top-6
           h-full
+          max-lg:pb-10
           w-20
           bg-transparent
           flex flex-col items-center mt-12 md:mt-2 gap-2

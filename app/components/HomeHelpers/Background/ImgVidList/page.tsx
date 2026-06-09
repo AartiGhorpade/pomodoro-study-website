@@ -46,7 +46,7 @@ const Page = () => {
   if (!isBgBoxOpen) return null;
 
   return (
-    <Draggable nodeRef={nodeRef} bounds="body">
+    <Draggable nodeRef={nodeRef} bounds="body" handle=".drag-handle">
       <main
         ref={nodeRef}
         className="
@@ -83,6 +83,10 @@ const Page = () => {
                 key={space.id}
                 className="group cursor-pointer overflow-hidden rounded-lg"
                 onClick={() => setBg(space.video)}
+                onTouchEnd={(e) => {
+                  e.preventDefault();
+                  setBg(space.video);
+                }}
               >
                 <video
                   src={space.video}
