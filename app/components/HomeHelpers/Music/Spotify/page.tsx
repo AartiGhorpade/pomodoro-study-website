@@ -32,11 +32,15 @@ export default function SpotifyWidget() {
       setSpotifyUrl(`https://open.spotify.com/embed/track/${trackMatch[1]}`);
     }
   };
+
   return (
     isSpotifyBoxOpen && (
       <Draggable nodeRef={nodeRef} bounds="body" handle=".drag-handle">
-        <div ref={nodeRef} className="absolute top-2 right-4 z-50">
-          <div className="bg-black/70 backdrop-blur-md rounded-xl p-4 min-w-[380px] shadow-2xl">
+        <div
+          ref={nodeRef}
+          className="absolute top-16 md:top-2 max-md:left-5 md:right-4 z-50"
+        >
+          <div className="bg-black/70 backdrop-blur-md rounded-xl p-4 w-full md:w-[380px] shadow-2xl">
             {/* Header */}
             <div className="drag-handle flex justify-between items-center mb-4 cursor-move">
               <h2 className="text-white font-semibold text-lg">Spotify</h2>

@@ -40,8 +40,8 @@ export default function Youtube() {
   return (
     isYtBoxOpen && (
       <Draggable nodeRef={nodeRef} bounds="body" handle=".drag-handle">
-        <div ref={nodeRef} className="absolute top-0 right-0 md:right-20 z-50">
-          <div className="bg-black/70 backdrop-blur-md rounded-xl p-5 min-w-[400px] h-[340px] shadow-2xl">
+        <div ref={nodeRef} className="absolute top-14 md:top-0 left-5 md:left-20 z-50">
+          <div className="bg-black/70 backdrop-blur-md rounded-xl p-5 w-full md:w-[400px] h-[340px] shadow-2xl">
             {/* Header */}
             <div className="drag-handle flex justify-between items-center mb-4 cursor-move">
               <h2 className="text-white font-semibold text-lg">YouTube</h2>

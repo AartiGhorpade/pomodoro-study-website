@@ -10,7 +10,6 @@ const page = () => {
     setCurrentBackground(bgUrl);
   }, [bgUrl]);
 
-  console.log(bgUrl)
 
   return (
     <div>

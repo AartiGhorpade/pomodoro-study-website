@@ -1,8 +1,9 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Draggable from "react-draggable";
 import { useBgBoxOpen, useBgUrl } from "@/app/store/useAppStore";
+import { Loader } from "lucide-react";
 
 const videos = [
   "avtar.mp4",
@@ -40,6 +41,13 @@ const Page = () => {
   const isBgBoxOpen = useBgBoxOpen((state) => state.isBgBoxOpen);
   const toggleBgBoxOpen = useBgBoxOpen((state) => state.toggleBgBoxOpen);
   const setBg = useBgUrl((state) => state.setBg);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 3500);
+  }, []);
 
   const nodeRef = useRef<HTMLElement>(null);
 
@@ -77,30 +85,36 @@ const Page = () => {
             </button>
           </div>
 
-          <div className="grid grid-cols-2 gap-4 max-h-[400px] overflow-y-auto custom-scrollbar pr-1">
-            {spaces.map((space) => (
-              <div
-                key={space.id}
-                className="group cursor-pointer overflow-hidden rounded-lg"
-                onClick={() => setBg(space.video)}
-                onTouchEnd={(e) => {
-                  e.preventDefault();
-                  setBg(space.video);
-                }}
-              >
-                <video
-                  src={space.video}
-                  muted
-                  preload="metadata"
-                  className="w-full h-24 object-cover rounded-lg transition-transform duration-300 group-hover:scale-105"
-                />
+          {loading ? (
+            <div className="flex items-center justify-center">
+              <Loader className="animate-spin" />
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 gap-4 max-h-[400px] overflow-y-auto custom-scrollbar pr-1">
+              {spaces.map((space) => (
+                <div
+                  key={space.id}
+                  className="group cursor-pointer overflow-hidden rounded-lg"
+                  onClick={() => setBg(space.video)}
+                  onTouchEnd={(e) => {
+                    e.preventDefault();
+                    setBg(space.video);
+                  }}
+                >
+                  <video
+                    src={space.video}
+                    muted
+                    preload="metadata"
+                    className="w-full h-24 object-cover rounded-lg transition-transform duration-300 group-hover:scale-105"
+                  />
 
-                {/* <p className="text-white text-xs text-center mt-2 capitalize truncate">
+                  {/* <p className="text-white text-xs text-center mt-2 capitalize truncate">
                   {space.title}
                 </p> */}
-              </div>
-            ))}
-          </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </main>
     </Draggable>

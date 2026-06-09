@@ -74,7 +74,9 @@ export default function Sidebar() {
         className={`
           fixed md:relative
           lg:top-0 left-0 top-6
-          h-full
+          max-lg:h-screen
+          lg:h-full
+          overflow-y-auto
           max-lg:pb-10
           w-20
           bg-transparent

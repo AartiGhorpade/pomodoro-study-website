@@ -160,9 +160,9 @@ const Page = () => {
         <Draggable nodeRef={nodeRef} bounds="parent">
           <section
             ref={nodeRef}
-            className="absolute top-10 right-20 pointer-events-auto"
+            className="absolute max-md:bottom-20 max-md:left-5 md:top-10 md:right-20 pointer-events-auto"
           >
-            <div className="bg-black/60 backdrop-blur-md px-8 pb-8 min-w-[320px] text-center">
+            <div className="bg-black/60 backdrop-blur-md px-8 pb-8 w-full md:w-[320px] text-center">
               <div className="pt-6 cursor-move">
                 <span
                   className="text-red-400 absolute top-3 right-5 font-bold cursor-pointer"
@@ -179,6 +179,11 @@ const Page = () => {
 
               <button
                 onClick={togglePlayPause}
+                onTouchEnd={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  togglePlayPause();
+                }}
                 className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 transition"
               >
                 {isPlaying ? <Pause size={18} /> : <Play size={18} />}
@@ -198,10 +203,15 @@ const Page = () => {
                       className="cursor-pointer"
                       checked={selected === sound.id}
                       onChange={() => handleSoundChange(sound.id)}
+                      onTouchEnd={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        handleSoundChange(sound.id);
+                      }}
                     />
 
                     <label htmlFor={sound.id} className="ml-3 cursor-pointer">
-                      {sound.icon} {sound.name}
+                      {sound.name}
                     </label>
                   </div>
                 ))}

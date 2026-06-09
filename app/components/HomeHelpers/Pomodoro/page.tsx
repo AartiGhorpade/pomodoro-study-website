@@ -64,7 +64,7 @@ const page = () => {
         <Draggable nodeRef={nodeRef} bounds="parent">
           <section
             ref={nodeRef}
-            className="absolute top-10 left-20 pointer-events-auto"
+            className="absolute md:top-10 top-16 left-8 md:left-20 pointer-events-auto"
           >
             <div className="bg-black/30 backdrop-blur-md px-8 pb-8 min-w-[320px] text-center">
               <span
@@ -97,6 +97,11 @@ const page = () => {
                 <button
                   className="px-6 text-sm py-1 font-medium rounded-lg cursor-pointer bg-white text-black"
                   onClick={() => setStarted((prev) => !prev)}
+                  onTouchEnd={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setStarted((prev) => !prev);
+                  }}
                 >
                   {started ? "Pause" : "Start"}
                 </button>
@@ -106,6 +111,12 @@ const page = () => {
                   onClick={() => {
                     setTime(globalTime);
                     setStarted(false);
+                  }}
+                  onTouchEnd={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setStarted(false);
+                    setTime(globalTime);
                   }}
                 >
                   Reset

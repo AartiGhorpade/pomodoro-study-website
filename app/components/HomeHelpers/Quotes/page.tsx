@@ -31,7 +31,7 @@ const Page = () => {
         <Draggable nodeRef={nodeRef} bounds="body" handle=".drag-handle">
           <div
             ref={nodeRef}
-            className="absolute top-0 left-1/2 -translate-x-1/2 z-60"
+            className="absolute top-14 md:top-0 left-1/2 -translate-x-1/2 z-60"
           >
             <span
               className="text-red-400 absolute top-3 right-5 z-50 font-bold cursor-pointer"
