@@ -33,6 +33,7 @@ const page = () => {
       setTimeBreak((prev) => !prev);
       setStarted(false);
     }
+
     return () => clearInterval(interval);
   }, [started, time]);
 
@@ -53,10 +54,10 @@ const page = () => {
   }, [timeBreak]);
 
   useEffect(() => {
-    if (!started) {
+    if (!started && !timeBreak) {
       setTime(globalTime);
     }
-  }, [globalTime]);
+  }, [globalTime, started, timeBreak]);
 
   return (
     isTimerBoxOpen && (

@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Draggable from "react-draggable";
 import { useBgBoxOpen, useBgUrl } from "@/app/store/useAppStore";
 import { Loader } from "lucide-react";
+import { errorToast } from "@/app/Helpers/Toasts";
 
 const videos = [
   "avtar.mp4",
@@ -17,11 +18,13 @@ const videos = [
   "fuji.mp4",
   "girl.mp4",
   "girl-1.mp4",
-  "girl-2.mp4",
   "girl-3.mp4",
+  "girl-2.mp4",
+  "flower-4.mp4",
+  // ".mp4",
   "girl-4.mp4",
-  "girl-study-room.mp4",
-  "house.mp4",
+  // "girl-study-room.mp4",
+  // "house.mp4",
   "lights.mp4",
   "lofi-girl.mp4",
   "mountain.mp4",
@@ -29,6 +32,13 @@ const videos = [
   "stream.mp4",
   "stream-2.mp4",
   "tree-nature.mp4",
+  "korea.mp4",
+  "flower-2.mp4",
+  "1.mp4",
+  "flower-1.mp4",
+  "japan-2.mp4",
+  "flower-3.mp4",
+  // ".mp4",
 ];
 
 const spaces = videos.map((video, index) => ({
@@ -53,6 +63,15 @@ const Page = () => {
 
   if (!isBgBoxOpen) return null;
 
+  const handleVideoUrl = (url: string) => {
+    if (!url.endsWith(".mp4")) {
+      errorToast("Please enter a direct .mp4 URL");
+      return;
+    }
+
+    setBg(url);
+  };
+
   return (
     <Draggable nodeRef={nodeRef} bounds="body" handle=".drag-handle">
       <main
@@ -66,7 +85,7 @@ const Page = () => {
           max-md:top-20
         "
       >
-        <div className="bg-black/60 backdrop-blur-md p-6 rounded-lg">
+        <div className="bg-black/60 backdrop-blur-md p-6">
           <div className="flex items-center justify-between mb-4">
             <p className="text-md font-bold text-white cursor-move">
               Explore Backgrounds
@@ -95,7 +114,7 @@ const Page = () => {
                 <div
                   key={space.id}
                   className="group cursor-pointer overflow-hidden rounded-lg"
-                  onClick={() => setBg(space.video)}
+                  onClick={() => setBg(space?.video)}
                   onTouchEnd={(e) => {
                     e.preventDefault();
                     setBg(space.video);
@@ -115,6 +134,18 @@ const Page = () => {
               ))}
             </div>
           )}
+
+          {/* Input */}
+          <input
+            type="text"
+            placeholder="Paste .mp4 Video URL"
+            className="mt-4 w-full bg-black/60 text-sm px-4 py-2 text-white outline-none"
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                handleVideoUrl((e.target as HTMLInputElement).value);
+              }
+            }}
+          />
         </div>
       </main>
     </Draggable>
