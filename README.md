@@ -1,36 +1,60 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ⏳ Pomodoro Focus Timer
 
-## Getting Started
+## 📌 Overview
 
-First, run the development server:
+Pomodoro Focus Timer is a productivity web application designed to help users stay focused and manage their study or work sessions effectively. The application follows the Pomodoro Technique by providing customizable focus and break timers, immersive backgrounds, and productivity-enhancing features.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## ✨ Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+* Customizable Pomodoro, Break timers
+* Start, pause, reset, and auto-switch timer functionality
+* Background music and ambient sounds
+* Draggable floating timer widget
+* Dynamic video backgrounds for immersive focus sessions
+* Background customization with user-selected media
+* Fully responsive design (mobile, tablet, desktop)
+* Clean and intuitive user interface
+* Session progress tracking
+* Toast notifications for timer events
+* Persistent settings using local storage
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🛠 Tech Stack
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+**Frontend:** Next.js, React.js, TypeScript
 
-## Learn More
+**Styling:** Tailwind CSS
 
-To learn more about Next.js, take a look at the following resources:
+**State Management:** Zustand
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## ⚙️ How It Works
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The application is built using reusable React components and centralized state management.
 
-## Deploy on Vercel
+### Core Components
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+* Navbar
+* Pomodoro Timer
+* Draggable Floating Timer
+* Background Selector
+* Settings Panel
+* Session Controls
+* Notification System
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Users can customize focus and break durations, select their preferred backgrounds, and track productivity sessions. State is managed efficiently using Zustand, while responsive layouts ensure a seamless experience across all devices.
+
+## 🔗 Live Demo
+
+[https://deepfocusroom.netlify.app/](https://deepfocusroom.netlify.app/)
+
+
+## 📈 Future Improvements
+
+* User authentication and cloud sync
+* Task management integration
+* Productivity analytics dashboard
+* Focus statistics and streak tracking
+* Multi-language support
+
+## 🙌 Inspiration
+
+This project was built to improve productivity and demonstrate modern frontend development practices using Next.js, React, Zustand, and Tailwind CSS while creating a polished user experience.
