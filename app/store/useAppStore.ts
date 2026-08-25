@@ -8,23 +8,29 @@ type fullScreen = {
 
 export const useFullScreen = create<fullScreen>((set, get) => ({
   isFullScreen: false,
+
   toggleFullScreen: () => {
     const isFs = get().isFullScreen;
+
     if (!isFs) {
       document.documentElement.requestFullscreen();
     } else {
       document.exitFullscreen();
     }
+
     set({ isFullScreen: !isFs });
   },
 }));
+
+
+/* ================= TIMER BOX ================= */
 
 type timerBox = {
   isTimerBoxOpen: boolean;
   toggleTimerBox: () => void;
 };
 
-export const useTimerBox = create<timerBox>((set, get) => ({
+export const useTimerBox = create<timerBox>((set) => ({
   isTimerBoxOpen: true,
 
   toggleTimerBox: () => {
@@ -34,12 +40,15 @@ export const useTimerBox = create<timerBox>((set, get) => ({
   },
 }));
 
+
+/* ================= SETTINGS ================= */
+
 type settings = {
   isSettingBoxOpen: boolean;
   toggleSettingBox: () => void;
 };
 
-export const useSettings = create<settings>((set, get) => ({
+export const useSettings = create<settings>((set) => ({
   isSettingBoxOpen: false,
 
   toggleSettingBox: () => {
@@ -48,6 +57,9 @@ export const useSettings = create<settings>((set, get) => ({
     }));
   },
 }));
+
+
+/* ================= POMODORO ================= */
 
 type pomodoroTimer = {
   globalTime: number;
@@ -60,18 +72,30 @@ type pomodoroTimer = {
 export const usePomodoroTimer = create<pomodoroTimer>()(
   persist(
     (set) => ({
+      // 25 minutes
       globalTime: 25 * 60,
+
+      // 5 minutes
       globalBreak: 5 * 60,
 
-      setGlobalTime: (minutes: number) => set({ globalTime: minutes * 60 }),
+      setGlobalTime: (minutes) =>
+        set({
+          globalTime: minutes * 60,
+        }),
 
-      setGlobalBreak: (minutes: number) => set({ globalBreak: minutes * 60 }),
+      setGlobalBreak: (minutes) =>
+        set({
+          globalBreak: minutes * 60,
+        }),
     }),
     {
       name: "pomodoro-storage",
-    },
-  ),
+    }
+  )
 );
+
+
+/* ================= BACKGROUND ================= */
 
 type openBackgroundGrid = {
   isBgBoxOpen: boolean;
@@ -80,12 +104,14 @@ type openBackgroundGrid = {
 
 export const useBgBoxOpen = create<openBackgroundGrid>((set) => ({
   isBgBoxOpen: false,
+
   toggleBgBoxOpen: () => {
     set((state) => ({
       isBgBoxOpen: !state.isBgBoxOpen,
     }));
   },
 }));
+
 
 type backgroundSet = {
   bgUrl: string;
@@ -97,13 +123,19 @@ export const useBgUrl = create<backgroundSet>()(
     (set) => ({
       bgUrl: "./backgrounds/videos/girl-4.mp4",
 
-      setBg: (url: string) => set({ bgUrl: url }),
+      setBg: (url) =>
+        set({
+          bgUrl: url,
+        }),
     }),
     {
       name: "bgUrl",
-    },
-  ),
+    }
+  )
 );
+
+
+/* ================= QUOTES ================= */
 
 type quotes = {
   isQuotesBoxOpen: boolean;
@@ -112,10 +144,10 @@ type quotes = {
 
 export const useQuotes = create<quotes>((set) => ({
   isQuotesBoxOpen: false,
+
   toggleQuotesBox: () => {
     set((state) => ({
       isQuotesBoxOpen: !state.isQuotesBoxOpen,
     }));
   },
 }));
-

@@ -1,47 +1,90 @@
 "use client";
-import { usePomodoroTimer, useSettings } from "@/app/store/useAppStore";
-import { useEffect, useState, useRef } from "react";
-import Draggable from "react-draggable";
+
+import {
+  usePomodoroTimer,
+  useSettings,
+} from "@/app/store/useAppStore";
+
+import { useEffect, useState } from "react";
 
 const Page = () => {
-  const time = usePomodoroTimer((state) => state.globalTime);
+  const globalTime = usePomodoroTimer(
+    (state) => state.globalTime
+  );
 
-  const setGlobalTime = usePomodoroTimer((state) => state.setGlobalTime);
-  const setGlobalBreak = usePomodoroTimer((state) => state.setGlobalBreak);
+  const globalBreak = usePomodoroTimer(
+    (state) => state.globalBreak
+  );
 
-  const isSettingsBoxOpen = useSettings((state) => state.isSettingBoxOpen);
-  const toggleSettingBox = useSettings((state) => state.toggleSettingBox);
-  const minutes = Math.floor(time / 60);
+  const setGlobalTime = usePomodoroTimer(
+    (state) => state.setGlobalTime
+  );
 
-  const [pomodoro, setPomodoro] = useState(minutes);
+  const setGlobalBreak = usePomodoroTimer(
+    (state) => state.setGlobalBreak
+  );
+
+  const isSettingsBoxOpen = useSettings(
+    (state) => state.isSettingBoxOpen
+  );
+
+  const toggleSettingBox = useSettings(
+    (state) => state.toggleSettingBox
+  );
+
+  const [pomodoro, setPomodoro] = useState(25);
   const [shortBreak, setShortBreak] = useState(5);
-  const [volume, setVolume] = useState(50);
-  // Save handler
+
+  /* Load current values when settings open */
+  useEffect(() => {
+    if (isSettingsBoxOpen) {
+      setPomodoro(Math.floor(globalTime / 60));
+      setShortBreak(Math.floor(globalBreak / 60));
+    }
+  }, [
+    isSettingsBoxOpen,
+    globalTime,
+    globalBreak,
+  ]);
+
+  /* Save */
   const handleSave = () => {
+    if (pomodoro < 1 || shortBreak < 1) {
+      return;
+    }
+
     setGlobalTime(pomodoro);
     setGlobalBreak(shortBreak);
+
     toggleSettingBox();
   };
 
   return (
     isSettingsBoxOpen && (
       <div className="fixed inset-0 z-70 flex items-center justify-center bg-black/60">
-        <div className="w-[420px] bg-black/60 backdrop-blur-md p-8 text-white shadow-xl relative">
-          {/* Close button */}
+        <div className="relative w-[420px] bg-black/60 p-8 text-white shadow-xl backdrop-blur-md">
+
+          {/* Close */}
           <button
             onClick={toggleSettingBox}
-            className="absolute right-5 top-4 font-bold text-red-400 text-xl cursor-pointer"
+            className="absolute right-5 top-4 cursor-pointer text-xl font-bold text-red-400"
           >
             ✕
           </button>
 
-          <h2 className="text-center text-lg font-semibold mb-4">Settings</h2>
+          {/* Title */}
+          <h2 className="mb-6 text-center text-lg font-semibold">
+            Settings
+          </h2>
 
-          {/* TIME SETTINGS */}
-          <div className="mb-4">
-            <p className="text-sm text-gray-300 mb-2">Time (minutes)</p>
+          {/* Time settings */}
+          <div className="mb-6">
+            <p className="mb-3 text-sm text-gray-300">
+              Time (minutes)
+            </p>
 
-            <div className="flex justify-between gap-3">
+            <div className="flex gap-4">
+
               <Counter
                 label="Pomodoro"
                 value={pomodoro}
@@ -53,28 +96,19 @@ const Page = () => {
                 value={shortBreak}
                 setValue={setShortBreak}
               />
+
             </div>
           </div>
 
-          {/* VOLUME */}
-          {/* <div className="mb-4">
-            <p className="text-sm text-gray-300 mb-2">Alarm Volume</p>
-
-            <input
-              type="range"
-              className="w-full"
-              value={volume}
-              onChange={(e) => setVolume(Number(e.target.value))}
-            />
-          </div> */}
-
-          {/* SAVE BUTTON */}
+          {/* Save */}
           <button
             onClick={handleSave}
-            className="w-full bg-[#000000] hover:bg-black/80 py-2 rounded-lg mt-2 cursor-pointer"
+            disabled={pomodoro < 1 || shortBreak < 1}
+            className="w-full cursor-pointer rounded-lg bg-black py-2 hover:bg-black/80 disabled:cursor-not-allowed disabled:opacity-50"
           >
             Save
           </button>
+
         </div>
       </div>
     )
@@ -82,6 +116,7 @@ const Page = () => {
 };
 
 export default Page;
+
 
 /* ================= COUNTER ================= */
 
@@ -92,28 +127,70 @@ function Counter({
 }: {
   label: string;
   value: number;
-  setValue: (v: number) => void;
+  setValue: (value: number) => void;
 }) {
   return (
-    <div className="flex flex-col items-center flex-1">
-      <span className="text-[14px] text-gray-400">{label}</span>
+    <div className="flex flex-1 flex-col items-center">
 
-      <div className="flex items-center gap-4 mt-2">
+      <span className="text-[14px] text-gray-400">
+        {label}
+      </span>
+
+      <div className="mt-2 flex items-center gap-3">
+
+        {/* Previous */}
         <button
-          className="px-2 bg-[#2a3142] rounded"
-          onClick={() => setValue(Math.max(1, value - 1))}
+          type="button"
+          className="cursor-pointer rounded bg-[#2a3142] px-2"
+          onClick={() =>
+            setValue(Math.max(1, value - 1))
+          }
         >
           ‹
         </button>
 
-        <span>{value}</span>
+        {/* Input */}
+        <input
+          type="number"
+          min="1"
+          value={value}
+          onChange={(e) => {
+            const inputValue = e.target.value;
 
+            if (inputValue === "") {
+              setValue(0);
+              return;
+            }
+
+            setValue(Number(inputValue));
+          }}
+          className="
+            w-16
+            rounded
+            border
+            border-gray-600
+            bg-black/40
+            px-2
+            py-1
+            text-center
+            outline-none
+            [appearance:textfield]
+            [&::-webkit-inner-spin-button]:appearance-none
+            [&::-webkit-outer-spin-button]:appearance-none
+          "
+        />
+
+        {/* Next */}
         <button
-          className="px-2 bg-[#2a3142] rounded"
-          onClick={() => setValue(value + 1)}
+          type="button"
+          className="cursor-pointer rounded bg-[#2a3142] px-2"
+          onClick={() =>
+            setValue(value + 1)
+          }
         >
           ›
         </button>
+
       </div>
     </div>
   );
