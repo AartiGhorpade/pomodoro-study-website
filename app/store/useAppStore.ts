@@ -22,7 +22,6 @@ export const useFullScreen = create<fullScreen>((set, get) => ({
   },
 }));
 
-
 /* ================= TIMER BOX ================= */
 
 type timerBox = {
@@ -40,7 +39,6 @@ export const useTimerBox = create<timerBox>((set) => ({
   },
 }));
 
-
 /* ================= SETTINGS ================= */
 
 type settings = {
@@ -57,7 +55,6 @@ export const useSettings = create<settings>((set) => ({
     }));
   },
 }));
-
 
 /* ================= POMODORO ================= */
 
@@ -90,10 +87,9 @@ export const usePomodoroTimer = create<pomodoroTimer>()(
     }),
     {
       name: "pomodoro-storage",
-    }
-  )
+    },
+  ),
 );
-
 
 /* ================= BACKGROUND ================= */
 
@@ -112,7 +108,6 @@ export const useBgBoxOpen = create<openBackgroundGrid>((set) => ({
   },
 }));
 
-
 type backgroundSet = {
   bgUrl: string;
   setBg: (url: string) => void;
@@ -130,10 +125,9 @@ export const useBgUrl = create<backgroundSet>()(
     }),
     {
       name: "bgUrl",
-    }
-  )
+    },
+  ),
 );
-
 
 /* ================= QUOTES ================= */
 
@@ -151,3 +145,39 @@ export const useQuotes = create<quotes>((set) => ({
     }));
   },
 }));
+
+/* ================= Total study ================= */
+
+type dailyStudy = {
+  dailyStudyTime: Record<string, number>;
+  addStudyTime: (seconds: number) => void;
+  getTodayStudyTime: () => number;
+};
+
+export const useDailyStudy = create<dailyStudy>()(
+  persist(
+    (set, get) => ({
+      dailyStudyTime: {},
+
+      addStudyTime: (seconds) => {
+        const today = new Date().toISOString().split("T")[0];
+
+        set((state) => ({
+          dailyStudyTime: {
+            ...state.dailyStudyTime,
+            [today]: (state.dailyStudyTime[today] || 0) + seconds,
+          },
+        }));
+      },
+
+      getTodayStudyTime: () => {
+        const today = new Date().toISOString().split("T")[0];
+
+        return get().dailyStudyTime[today] || 0;
+      },
+    }),
+    {
+      name: "daily-study-storage",
+    },
+  ),
+);

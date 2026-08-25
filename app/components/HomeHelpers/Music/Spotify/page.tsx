@@ -10,7 +10,7 @@ export default function SpotifyWidget() {
   const isSpotifyBoxOpen = useSpotify((state) => state.isSpotifyBoxOpen);
 
   const [spotifyUrl, setSpotifyUrl] = useState(
-    "https://open.spotify.com/embed/playlist/37i9dQZF1DWZd79rJ6a7lp",
+    "https://open.spotify.com/embed/playlist/37i9dQZF1DWZeKCadgRdKQ",
   );
 
   const handleSpotifyUrl = (url: string) => {
