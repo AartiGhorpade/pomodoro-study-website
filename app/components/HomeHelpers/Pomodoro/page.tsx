@@ -71,7 +71,7 @@ const Page = () => {
 
   const studyTitle = `${currentDay}${getOrdinal(
     currentDay,
-  )} ${currentMonth} Study`;
+  )} ${currentMonth}'s Focus`;
 
   /* ================= TODAY ================= */
 
