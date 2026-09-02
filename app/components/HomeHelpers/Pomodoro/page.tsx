@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
+
 import Draggable from "react-draggable";
 
 import { successToast, errorToast } from "@/app/Helpers/Toasts";
@@ -13,39 +14,35 @@ import {
 
 const Page = () => {
   const isTimerBoxOpen = useTimerBox((state) => state.isTimerBoxOpen);
+
   const toggleTimerBox = useTimerBox((state) => state.toggleTimerBox);
 
   const globalTime = usePomodoroTimer((state) => state.globalTime);
+
   const globalBreak = usePomodoroTimer((state) => state.globalBreak);
 
   const addStudyTime = useDailyStudy((state) => state.addStudyTime);
 
-  const [started, setStarted] = useState(false);
-  const [time, setTime] = useState(globalTime);
-  const [isBreak, setIsBreak] = useState(false);
+  const [started, setStarted] = React.useState(false);
+
+  const [time, setTime] = React.useState(globalTime);
+
+  const [isBreak, setIsBreak] = React.useState(false);
 
   const nodeRef = useRef<HTMLElement>(null);
 
-  /*
-   * ----------------------------------------------------
-   * TIMER REFS
-   * ----------------------------------------------------
-   */
+  const previousGlobalTime = useRef(globalTime);
 
-  // When current running period started
-  const startTimestampRef = useRef<number | null>(null);
+  const previousGlobalBreak = useRef(globalBreak);
 
-  // Seconds already completed before current start/resume
-  const elapsedBeforeStartRef = useRef(0);
+  const minutes = Math.floor(time / 60);
 
-  // Used to prevent repeatedly adding same study seconds
-  const lastStudySecondRef = useRef(0);
+  const seconds = time % 60;
 
-  /*
-   * ----------------------------------------------------
-   * DATE
-   * ----------------------------------------------------
-   */
+  const breakMinutes =
+    globalBreak >= 60 ? Math.floor(globalBreak / 60) : globalBreak;
+
+  /* ================= DATE ================= */
 
   const currentDate = new Date();
 
@@ -63,13 +60,10 @@ const Page = () => {
     switch (day % 10) {
       case 1:
         return "st";
-
       case 2:
         return "nd";
-
       case 3:
         return "rd";
-
       default:
         return "th";
     }
@@ -79,11 +73,7 @@ const Page = () => {
     currentDay,
   )} ${currentMonth}'s Focus`;
 
-  /*
-   * ----------------------------------------------------
-   * TODAY
-   * ----------------------------------------------------
-   */
+  /* ================= TODAY ================= */
 
   const year = currentDate.getFullYear();
 
@@ -103,178 +93,32 @@ const Page = () => {
 
   const studySeconds = dailyStudyTime % 60;
 
-  /*
-   * ----------------------------------------------------
-   * DISPLAY TIME
-   * ----------------------------------------------------
-   */
-
-  const minutes = Math.floor(Math.max(0, time) / 60);
-
-  const seconds = Math.max(0, time) % 60;
-
-  const breakMinutes =
-    globalBreak >= 60 ? Math.floor(globalBreak / 60) : globalBreak;
-
-  /*
-   * ----------------------------------------------------
-   * START / PAUSE
-   * ----------------------------------------------------
-   */
-
-  const handleStartPause = () => {
-    /*
-     * PAUSE
-     */
-    if (started) {
-      if (startTimestampRef.current !== null) {
-        const elapsed = Math.floor(
-          (Date.now() - startTimestampRef.current) / 1000,
-        );
-
-        elapsedBeforeStartRef.current += elapsed;
-      }
-
-      startTimestampRef.current = null;
-
-      setStarted(false);
-
-      return;
-    }
-
-    /*
-     * START / RESUME
-     */
-
-    startTimestampRef.current = Date.now();
-
-    lastStudySecondRef.current = elapsedBeforeStartRef.current;
-
-    setStarted(true);
-  };
-
-  /*
-   * ----------------------------------------------------
-   * RESET
-   * ----------------------------------------------------
-   */
-
-  const handleReset = () => {
-    startTimestampRef.current = null;
-
-    elapsedBeforeStartRef.current = 0;
-
-    lastStudySecondRef.current = 0;
-
-    setStarted(false);
-
-    setIsBreak(false);
-
-    setTime(globalTime);
-  };
-
-  /*
-   * ----------------------------------------------------
-   * ACCURATE TIMER
-   * ----------------------------------------------------
-   */
+  /* ================= COUNTDOWN ================= */
 
   useEffect(() => {
-    if (!started) {
-      return;
-    }
+    if (!started) return;
 
-    if (startTimestampRef.current === null) {
-      startTimestampRef.current = Date.now();
-    }
-
-    /*
-     * Update immediately
-     */
-    const updateTimer = () => {
-      if (startTimestampRef.current === null) {
-        return;
-      }
-
-      const currentElapsed = Math.floor(
-        (Date.now() - startTimestampRef.current) / 1000,
-      );
-
-      const totalElapsed = elapsedBeforeStartRef.current + currentElapsed;
-
-      /*
-       * ------------------------------------------------
-       * STUDY TIMER
-       * ------------------------------------------------
-       */
+    const interval = setInterval(() => {
+      setTime((prev) => prev - 1);
 
       if (!isBreak) {
-        const remaining = globalTime - totalElapsed;
-
-        setTime(Math.max(0, remaining));
-
-        /*
-         * Add ONLY newly completed seconds
-         */
-        const newStudySeconds = totalElapsed - lastStudySecondRef.current;
-
-        if (newStudySeconds > 0) {
-          addStudyTime(newStudySeconds);
-
-          lastStudySecondRef.current = totalElapsed;
-        }
-
-        return;
+        addStudyTime(1);
       }
-
-      /*
-       * ------------------------------------------------
-       * BREAK TIMER
-       * ------------------------------------------------
-       */
-
-      const remaining = globalBreak - totalElapsed;
-
-      setTime(Math.max(0, remaining));
-    };
-
-    /*
-     * 250ms update makes display smooth.
-     *
-     * IMPORTANT:
-     * Accuracy does NOT depend on 250ms.
-     * Date.now() calculates actual elapsed time.
-     */
-    const interval = setInterval(updateTimer, 250);
-
-    updateTimer();
+    }, 1000);
 
     return () => {
       clearInterval(interval);
     };
-  }, [started, isBreak, globalTime, globalBreak, addStudyTime]);
+  }, [started, isBreak, addStudyTime]);
 
-  /*
-   * ----------------------------------------------------
-   * TIMER FINISHED
-   * ----------------------------------------------------
-   */
+  /* ================= TIMER FINISHED ================= */
 
   useEffect(() => {
     if (!started || time > 0) {
       return;
     }
 
-    /*
-     * STUDY -> BREAK
-     */
     if (!isBreak) {
-      startTimestampRef.current = Date.now();
-
-      elapsedBeforeStartRef.current = 0;
-
-      lastStudySecondRef.current = 0;
-
       setIsBreak(true);
 
       setTime(globalBreak);
@@ -286,16 +130,6 @@ const Page = () => {
       return;
     }
 
-    /*
-     * BREAK -> STUDY
-     */
-
-    startTimestampRef.current = Date.now();
-
-    elapsedBeforeStartRef.current = 0;
-
-    lastStudySecondRef.current = 0;
-
     setIsBreak(false);
 
     setTime(globalTime);
@@ -305,27 +139,47 @@ const Page = () => {
     errorToast("Time to study! 📚");
   }, [time, started, isBreak, globalTime, globalBreak]);
 
-  /*
-   * ----------------------------------------------------
-   * SETTINGS UPDATE
-   * ----------------------------------------------------
-   */
+  /* ================= SETTINGS UPDATE ================= */
 
   useEffect(() => {
-    if (!started) {
-      setTime(isBreak ? globalBreak : globalTime);
+    if (previousGlobalTime.current !== globalTime) {
+      previousGlobalTime.current = globalTime;
 
-      elapsedBeforeStartRef.current = 0;
-
-      lastStudySecondRef.current = 0;
+      if (!isBreak) {
+        setTime(globalTime);
+      }
     }
-  }, [globalTime, globalBreak, isBreak, started]);
+  }, [globalTime, isBreak]);
 
-  /*
-   * ----------------------------------------------------
-   * RENDER
-   * ----------------------------------------------------
-   */
+  useEffect(() => {
+    if (previousGlobalBreak.current !== globalBreak) {
+      previousGlobalBreak.current = globalBreak;
+
+      if (isBreak) {
+        setTime(globalBreak);
+      }
+    }
+  }, [globalBreak, isBreak]);
+
+  /* ================= START / PAUSE ================= */
+
+  const handleStartPause = () => {
+    setStarted((prev) => !prev);
+  };
+
+  /* ================= RESET ================= */
+
+  const handleReset = () => {
+    setStarted(false);
+
+    setIsBreak(false);
+
+    setTime(globalTime);
+
+    previousGlobalTime.current = globalTime;
+
+    previousGlobalBreak.current = globalBreak;
+  };
 
   return (
     <>
@@ -334,59 +188,17 @@ const Page = () => {
           <Draggable nodeRef={nodeRef} bounds="parent" handle=".drag-handle">
             <section
               ref={nodeRef}
-              className="
-                absolute
-                md:top-10
-                top-30
-                left-8
-                md:left-20
-                pointer-events-auto
-              "
+              className="absolute md:top-10 top-30 left-8 md:left-20 pointer-events-auto"
             >
-              <div
-                className="
-                  bg-black/30
-                  backdrop-blur-md
-                  px-8
-                  pb-8
-                  min-w-[320px]
-                  text-center
-                  rounded-xl
-                "
-              >
+              <div className="bg-black/30 backdrop-blur-md px-8 pb-8 min-w-[320px] text-center">
                 {/* ================= DRAG HANDLE ================= */}
 
-                <div
-                  className="
-                    drag-handle
-                    flex
-                    justify-center
-                    pt-8
-                    cursor-move
-                    touch-none
-                  "
-                >
+                <div className="drag-handle flex justify-center pt-8 cursor-move touch-none">
                   <button
-                    type="button"
-                    className="
-                      px-6
-                      py-1
-                      font-bold
-                      rounded-lg
-                      text-white
-                      border
-                      border-gray-500
-                      cursor-pointer
-                    "
-                    onClick={(e) => {
-                      /*
-                       * Prevent draggable from
-                       * treating this click as drag
-                       */
-                      e.stopPropagation();
-
-                      successToast(`${breakMinutes} Minutes Break Added!`);
-                    }}
+                    className="px-6 py-1 font-bold rounded-lg text-white border border-gray-500"
+                    onClick={() =>
+                      successToast(`${breakMinutes} Minutes Break Added!`)
+                    }
                   >
                     {breakMinutes} Minutes Break
                   </button>
@@ -394,33 +206,16 @@ const Page = () => {
 
                 {/* ================= CLOSE ================= */}
 
-                <button
-                  type="button"
-                  className="
-                    text-red-400
-                    absolute
-                    top-5
-                    right-5
-                    font-bold
-                    cursor-pointer
-                    z-10
-                  "
+                <span
+                  className="text-red-400 absolute top-5 right-5 font-bold cursor-pointer z-10"
                   onClick={toggleTimerBox}
                 >
                   X
-                </button>
+                </span>
 
                 {/* ================= TIMER ================= */}
 
-                <h1
-                  className="
-                    text-white
-                    text-8xl
-                    font-bold
-                    mt-4
-                    mb-6
-                  "
-                >
+                <h1 className="text-white text-8xl font-bold mt-4 mb-6">
                   {minutes.toString().padStart(2, "0")}:
                   {seconds.toString().padStart(2, "0")}
                 </h1>
@@ -430,16 +225,7 @@ const Page = () => {
                 <div className="flex justify-center gap-8">
                   <button
                     type="button"
-                    className="
-                      px-6
-                      text-sm
-                      py-1
-                      font-medium
-                      rounded-lg
-                      cursor-pointer
-                      bg-white
-                      text-black
-                    "
+                    className="px-6 text-sm py-1 font-medium rounded-lg cursor-pointer bg-white text-black"
                     onClick={handleStartPause}
                   >
                     {started ? "Pause" : "Start"}
@@ -447,16 +233,7 @@ const Page = () => {
 
                   <button
                     type="button"
-                    className="
-                      px-6
-                      py-1
-                      text-sm
-                      font-medium
-                      rounded-lg
-                      cursor-pointer
-                      bg-white/10
-                      text-white
-                    "
+                    className="px-6 py-1 text-sm font-medium rounded-lg cursor-pointer bg-white/10 text-white"
                     onClick={handleReset}
                   >
                     Reset
@@ -468,20 +245,8 @@ const Page = () => {
         </div>
       )}
 
-      {/* ================= TODAY'S STUDY ================= */}
-
-      <div
-        className="
-          mt-6
-          text-white
-          absolute
-          right-5
-          bg-black
-          backdrop-blur-md
-          p-5
-          rounded-lg
-        "
-      >
+      {/* TODAY'S STUDY */}
+      <div className="mt-6 text-white absolute right-5 bg-black backdrop-blur-md p-5">
         <p className="text-sm text-gray-400 mb-1">{studyTitle}</p>
 
         <p className="text-xl font-semibold">
