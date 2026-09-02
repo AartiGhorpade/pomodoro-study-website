@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
-
 import Draggable from "react-draggable";
 
 import { successToast, errorToast } from "@/app/Helpers/Toasts";
@@ -14,29 +13,29 @@ import {
 
 const Page = () => {
   const isTimerBoxOpen = useTimerBox((state) => state.isTimerBoxOpen);
-
   const toggleTimerBox = useTimerBox((state) => state.toggleTimerBox);
 
   const globalTime = usePomodoroTimer((state) => state.globalTime);
-
   const globalBreak = usePomodoroTimer((state) => state.globalBreak);
 
   const addStudyTime = useDailyStudy((state) => state.addStudyTime);
 
   const [started, setStarted] = React.useState(false);
-
   const [time, setTime] = React.useState(globalTime);
-
   const [isBreak, setIsBreak] = React.useState(false);
+
+  // Exact time when current study/break session should finish
+  const [endTime, setEndTime] = React.useState<number | null>(null);
 
   const nodeRef = useRef<HTMLElement>(null);
 
   const previousGlobalTime = useRef(globalTime);
-
   const previousGlobalBreak = useRef(globalBreak);
 
-  const minutes = Math.floor(time / 60);
+  // Used for accurate study-time tracking
+  const lastStudyUpdate = useRef<number | null>(null);
 
+  const minutes = Math.floor(time / 60);
   const seconds = time % 60;
 
   const breakMinutes =
@@ -96,20 +95,36 @@ const Page = () => {
   /* ================= COUNTDOWN ================= */
 
   useEffect(() => {
-    if (!started) return;
+    if (!started || !endTime) return;
+
+    // Start measuring actual elapsed time
+    lastStudyUpdate.current = Date.now();
 
     const interval = setInterval(() => {
-      setTime((prev) => prev - 1);
+      const now = Date.now();
 
-      if (!isBreak) {
-        addStudyTime(1);
+      // Calculate remaining time from actual clock
+      const remaining = Math.max(0, Math.ceil((endTime - now) / 1000));
+
+      setTime(remaining);
+
+      // Track actual study time
+      if (!isBreak && lastStudyUpdate.current) {
+        const elapsed = Math.floor((now - lastStudyUpdate.current) / 1000);
+
+        if (elapsed > 0) {
+          addStudyTime(elapsed);
+
+          lastStudyUpdate.current = now;
+        }
       }
-    }, 1000);
+    }, 250);
 
     return () => {
       clearInterval(interval);
+      lastStudyUpdate.current = null;
     };
-  }, [started, isBreak, addStudyTime]);
+  }, [started, endTime, isBreak, addStudyTime]);
 
   /* ================= TIMER FINISHED ================= */
 
@@ -118,10 +133,12 @@ const Page = () => {
       return;
     }
 
+    // Study finished → Start break
     if (!isBreak) {
       setIsBreak(true);
-
       setTime(globalBreak);
+
+      setEndTime(Date.now() + globalBreak * 1000);
 
       setStarted(true);
 
@@ -130,9 +147,11 @@ const Page = () => {
       return;
     }
 
+    // Break finished → Start study
     setIsBreak(false);
-
     setTime(globalTime);
+
+    setEndTime(Date.now() + globalTime * 1000);
 
     setStarted(true);
 
@@ -147,9 +166,15 @@ const Page = () => {
 
       if (!isBreak) {
         setTime(globalTime);
+
+        // If timer is currently running,
+        // update its end time as well.
+        if (started) {
+          setEndTime(Date.now() + globalTime * 1000);
+        }
       }
     }
-  }, [globalTime, isBreak]);
+  }, [globalTime, isBreak, started]);
 
   useEffect(() => {
     if (previousGlobalBreak.current !== globalBreak) {
@@ -157,14 +182,30 @@ const Page = () => {
 
       if (isBreak) {
         setTime(globalBreak);
+
+        // If break is currently running,
+        // update its end time as well.
+        if (started) {
+          setEndTime(Date.now() + globalBreak * 1000);
+        }
       }
     }
-  }, [globalBreak, isBreak]);
+  }, [globalBreak, isBreak, started]);
 
   /* ================= START / PAUSE ================= */
 
   const handleStartPause = () => {
-    setStarted((prev) => !prev);
+    if (!started) {
+      // Start/resume timer using remaining time
+      setEndTime(Date.now() + time * 1000);
+
+      setStarted(true);
+    } else {
+      // Pause timer
+      setStarted(false);
+
+      setEndTime(null);
+    }
   };
 
   /* ================= RESET ================= */
@@ -176,9 +217,13 @@ const Page = () => {
 
     setTime(globalTime);
 
+    setEndTime(null);
+
     previousGlobalTime.current = globalTime;
 
     previousGlobalBreak.current = globalBreak;
+
+    lastStudyUpdate.current = null;
   };
 
   return (
@@ -195,6 +240,7 @@ const Page = () => {
 
                 <div className="drag-handle flex justify-center pt-8 cursor-move touch-none">
                   <button
+                    type="button"
                     className="px-6 py-1 font-bold rounded-lg text-white border border-gray-500"
                     onClick={() =>
                       successToast(`${breakMinutes} Minutes Break Added!`)
@@ -245,7 +291,8 @@ const Page = () => {
         </div>
       )}
 
-      {/* TODAY'S STUDY */}
+      {/* ================= TODAY'S STUDY ================= */}
+
       <div className="mt-6 text-white absolute right-5 bg-black backdrop-blur-md p-5">
         <p className="text-sm text-gray-400 mb-1">{studyTitle}</p>
 
